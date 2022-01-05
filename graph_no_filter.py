@@ -3,7 +3,7 @@ import matplotlib.pyplot as mplib
 from dv import AedatFile
 import os
 min = 0  #index ranges
-max = 25000
+max = 50000
 
 with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2021_08_24_10_44_21.aedat4") as f:
     #events will be a named numpy array
