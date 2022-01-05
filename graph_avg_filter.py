@@ -33,6 +33,7 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2021_08_24_10_44_21.aedat4") as
         flag = 1
         hit = 0
 
+        #ensure that we don't consider pixels that have already been added as positives to reduce processing time
         if len(xavg) > 1:
             index2 = 0
             while index2 < len(xavg):
@@ -42,14 +43,14 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2021_08_24_10_44_21.aedat4") as
 
         index3 = 0
         while index3 < len(xvar) and flag == 1:
-            if xvar[index1] == xvar[index3] and yvar[index1] == yvar[index3]:
+            if xvar[index1] == xvar[index3] and yvar[index1] == yvar[index3]: #same x and y coordinate of a pixel with polarity = 1 generates a hit
                 hit += 1
             index3 += 1
 
         if hit >= positive:
-            xavg.append(xvar[index1])
+            xavg.append(xvar[index1]) #add pixel if we get more hits than the threshold 'positive'
             yavg.append(yvar[index1])
-            print("x: " + str(xavg[len(xavg) - 1]) + '  y: ' + str(yavg[len(xavg) - 1]))
+            print("x: " + str(xavg[len(xavg) - 1]) + '  y: ' + str(yavg[len(xavg) - 1])) #print x and y coordinates of every positive pixel
         index1 += 1
 
 max = max - min
