@@ -10,7 +10,7 @@ import os
 start_time = time.time()
 #The time_range is how far back in time and in the future of the current index does the program check for hits
 #This has the largest hit on performance (Exponentially).
-time_range = 6
+time_range = 7
 #Positive is the minumun number of neighbor hits that must be attained for the hit to be added to the plot.
 positive = 2
 #The max_distance is the maximum distance in a 3d space where z is time, that a hit must be under to be added to the plot.
@@ -136,7 +136,7 @@ with AedatFile(r"C:\Users\matth\Desktop\DV_FILES\dvSave-2021_08_24_10_44_21.aeda
         plt.xlim(0, 350)
         plt.ylim(0, 250)
         plt.scatter(x_hits,y_hits,s=0.5,c='r')
-        plt.savefig(str(test))
+        plt.savefig(str(index3))
         plt.clf()
 
         #Increment time.
