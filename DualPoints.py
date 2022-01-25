@@ -194,6 +194,8 @@ with AedatFile(r"C:\Users\111gu\Desktop\Data\DV_FILES\dvSave-2021_08_24_10_44_21
         red_patch = mpatches.Patch(color='red', label='Second (+1) Filter output')
         skyblue_patch = mpatches.Patch(color='skyblue', label='First (-1) Filter output')
         blue_patch = mpatches.Patch(color='blue', label='Second (-1) Filter output')
+        title = "Time Increment: " + str(min) + " to " + str(max)
+        plt.title(title)
         plt.legend(handles=[red_patch, bisque_patch, blue_patch, skyblue_patch], loc=1)
         plt.xlim(0, 350)
         plt.ylim(0, 250)
