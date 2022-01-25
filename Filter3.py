@@ -26,18 +26,18 @@ increment = 40000
 
 
 ### FILTER 1 ###
-min = 5
+min = 0
 max = 40000
 test = 0
 
 #Load data from Aedat file.
-with AedatFile(r"C:\Users\matth\Desktop\DV_FILES\dvSave-2021_08_24_10_44_21.aedat4") as f:
+with AedatFile(r"C:\Users\Lenovo\Documents\Collins\CollinsCapstone\DV_FILES\dvSave-2021_08_24_10_44_21.aedat4") as f:
     events = np.hstack([packet for packet in f['events'].numpy()])
     timestamps, x, y, polarities = events['timestamp'], events['x'], events['y'], events['polarity']
 
     
     ###########
-    # Filter1 #
+    # Filter2 #
     ###########
 
     
@@ -106,7 +106,7 @@ with AedatFile(r"C:\Users\matth\Desktop\DV_FILES\dvSave-2021_08_24_10_44_21.aeda
 
     #Below here is a while loop that loops through the video data in increments.
     index3 = 0
-    while index3 < 500:
+    while index3 < 20:
         #Call the first filter and return the data to x_hits and y_hits.
         x_hits,y_hits = jitted_filter1(events,min,max)
         
@@ -130,8 +130,10 @@ with AedatFile(r"C:\Users\matth\Desktop\DV_FILES\dvSave-2021_08_24_10_44_21.aeda
         print("On Image #",index3)
 
         #Plots data
-        red_patch = mpatches.Patch(color='red', label='Filter 1 output')
-        gray_patch = mpatches.Patch(color='silver', label='Filter 2 output')
+        red_patch = mpatches.Patch(color='red', label='Filter 2 output')
+        gray_patch = mpatches.Patch(color='silver', label='Filter 1 output')
+        title = "Time Increment: " + str(min) + " to " + str(max)
+        plt.title(title)
         plt.legend(handles=[red_patch,gray_patch],loc=1)
         plt.xlim(0, 350)
         plt.ylim(0, 250)
