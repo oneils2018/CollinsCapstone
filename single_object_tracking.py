@@ -110,54 +110,68 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball
     # Jitting filter2 to run faster as well.
     jitted_filter2 = jit(nopython=True)(plot_filter)
 
+    ################
+    ### TRACKING ###
+    ################
+
+    #Function below takes filtered data and outputs the object center and left, right, top, and bottom bounds
+    #min_distance is the minimum distance that the algorithm reaches before it "gives up" trying to find more pixels and just sets the last pixel hit as the right bound
     def tracking(min_distance, x_hits, y_hits, x_hits0, y_hits0):
+        #Combine pixels of 1 and -1 polarity
         x_hits = np.concatenate((x_hits, x_hits0))
         y_hits = np.concatenate((y_hits, y_hits0))
 
+        #Coordinates for center of object
         x_average = 0
         y_average = 0
 
-        x_right = 0
-        y_right = 0
-
+        #Calculate the average for x hits and y hits to find the center of object
         index = 0
-
         while index < len(x_hits):
             x_average += x_hits[index]
             y_average += y_hits[index]
             index += 1
-
         x_average /= len(x_hits)
         y_average /= len(y_hits)
-        print("x_average")
-        print(x_average)
 
-        index1 = int(x_average)
+        #CODE BELOW FINDS THE RIGHT BOUND
+        index1 = int(x_average) #Start looking at pixels to the right of the center
         flag = True
-        no_hit = 0
-        y_right = y_average
+        no_hit = 0 #Track number of pixels in a row without a hit
+        y_right = y_average #Look at pixels directly to the right of the center
 
+        #Iterate through pixels left to right starting at the center and ending either at the right bound or the edge of the frame
         while flag and index1 < 346:
-            hit = False
+            hit = False #Reset hit flag
+            #Iterate through all of x_hits to see if there's a hit
             index2 = 0
             while index2 < len(x_hits) and not hit:
+                #If there's a hit, update the x coordinate for the right bound and exit the loop
                 if x_hits[index2] == index1:
                     hit = True
                     x_right = index1
+                #If not, keep looping
                 else:
                     hit = False
                 index2 += 1
+            #If there's a hit, reset the no_hit counter since it only counts number of misses in a row
             if hit:
                 no_hit = 0
+            #If there was no hit, increment the misses in a row counter
             else:
                 no_hit += 1
+            #If there hasn't been a hit for more then the given minimum distance, give up and exit the loop. x_right is left as the last x coordinate there was a hit
             if no_hit > min_distance:
                 flag = False
-            index1 += 1
+            index1 += 1 #We are traveling to the right
 
+        #If the object is cutoff by the edge of the frame, set the right bound to the edge of the frame
         if index1 == 345:
             x_right = 345
 
+
+        #CODE BELOW FINDS THE LEFT BOUND
+        #See comments for right bound
         index1 = int(x_average)
         flag = True
         no_hit = 0
@@ -184,6 +198,8 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball
         if index1 == 1:
             x_left = 1
 
+        #CODE BELOW FINDS THE TOP BOUND
+        #See comments for right bound
         index1 = int(y_average)
         flag = True
         no_hit = 0
@@ -210,6 +226,9 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball
         if index1 == 259:
             y_top = 259
 
+
+        #CODE BELOW FINDS THE BOTTOM BOUND
+        #See comments for right bound
         index1 = int(y_average)
         flag = True
         no_hit = 0
@@ -236,6 +255,7 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball
         if index1 == 1:
             y_bottom = 1
 
+        #Return the coordinates for the center of the object and the right, left, top, and bottom bounds
         return x_average, y_average, x_right, y_right, x_left, y_left, x_top, y_top, x_bottom, y_bottom
 
     jitted_filter4 = jit(nopython=True)(tracking)
@@ -311,14 +331,14 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball
             x_hits0, y_hits0 = jitted_filter2(x_hits0, y_hits0)
             index += 1
 
-        tolerance = 5
-        x_object, y_object, x_right, y_right, x_left, y_left, x_top, y_top, x_bottom, y_bottom = jitted_filter4(10, x_hits, y_hits, x_hits0, y_hits0)
+        tolerance = 5 #Sets how far the box should be from the actual top, bottom, left, and right of the object
+        x_object, y_object, x_right, y_right, x_left, y_left, x_top, y_top, x_bottom, y_bottom = jitted_filter4(10, x_hits, y_hits, x_hits0, y_hits0) #Run tracking function
 
+        #Apply tolerance
         if x_right < 345:
             x_right = x_right + tolerance
         if x_left > 1:
             x_left = x_left - tolerance
-
         if y_top < 259:
             y_top = y_top + tolerance
         if y_bottom > 1:
@@ -341,6 +361,8 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball
         plt.legend(handles=[red_patch, bisque_patch, blue_patch, skyblue_patch], loc=1)
         plt.xlim(0, 350)
         plt.ylim(0, 250)
+
+        #Plot points for center of the object, left, right, top, and bottom bounds
         plt.scatter(x_hits, y_hits, s=0.5, c='r')
         plt.scatter(x_hits0, y_hits0, s=0.5, c='b')
         plt.scatter(x_object, y_object, s=10, c='g')
@@ -348,7 +370,7 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball
         plt.scatter(x_left, y_left, s=10, c='g')
         plt.scatter(x_top, y_top, s=10, c='g')
         plt.scatter(x_bottom, y_bottom, s=10, c='g')
-        rectangle = plt.Rectangle((x_left, y_bottom), x_right - x_left, y_top - y_bottom, fc='none', ec="green")
+        rectangle = plt.Rectangle((x_left, y_bottom), x_right - x_left, y_top - y_bottom, fc='none', ec="green") #Draw rectangle around the object
         plt.gca().add_patch(rectangle)
         plt.savefig(str(index3))
         plt.clf()
