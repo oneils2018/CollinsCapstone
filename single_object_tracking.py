@@ -115,7 +115,7 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball
     ################
 
     #Function below takes filtered data and outputs the object center and left, right, top, and bottom bounds
-    #min_distance is the minimum distance that the algorithm reaches before it "gives up" trying to find more pixels and just sets the last pixel hit as the right bound
+    #min_distance is the minimum distance that the algorithm reaches before it "gives up" trying to find more pixels and just sets the last pixel hit as the bound
     def tracking(min_distance, x_hits, y_hits, x_hits0, y_hits0):
         #Combine pixels of 1 and -1 polarity
         x_hits = np.concatenate((x_hits, x_hits0))
