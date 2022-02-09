@@ -659,15 +659,15 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2021_08_24_10_44_21.aedat4") as
         print("On Image #", index3)
 
         # Plots data
-        #bisque_patch = mpatches.Patch(color='pink', label='First (+1) Filter output')
-        #red_patch = mpatches.Patch(color='red', label='Second (+1) Filter output')
-        #skyblue_patch = mpatches.Patch(color='skyblue', label='First (-1) Filter output')
-        #blue_patch = mpatches.Patch(color='blue', label='Second (-1) Filter output')
+        bisque_patch = mpatches.Patch(color='pink', label='First (+1) Filter output')
+        red_patch = mpatches.Patch(color='red', label='Second (+1) Filter output')
+        skyblue_patch = mpatches.Patch(color='skyblue', label='First (-1) Filter output')
+        blue_patch = mpatches.Patch(color='blue', label='Second (-1) Filter output')
         title = "Time Increment: " + str(min) + " to " + str(max)
         plt.title(title)
-        #plt.legend(handles=[red_patch, bisque_patch, blue_patch, skyblue_patch], loc=1)
+        plt.legend(handles=[red_patch, bisque_patch, blue_patch, skyblue_patch], loc=1)
         plt.xlim(0, 350)
-        plt.ylim(0, 250)
+        plt.ylim(250, 0)
         plt.scatter(x_hits, y_hits, s=0.5, c='pink')
         plt.scatter(x_hits0, y_hits0, s=0.5, c='skyblue')
 
@@ -716,7 +716,7 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2021_08_24_10_44_21.aedat4") as
 
         plt.scatter(x_inside1_p, y_inside1_p, s=0.5, c='r')
         plt.scatter(x_inside1_n, y_inside1_n, s=0.5, c='b')
-        plt.savefig(str(index3))
+        plt.savefig(str(index3), bbox_inches='tight')
         plt.clf()
 
         # Increment time.
