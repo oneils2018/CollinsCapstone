@@ -35,7 +35,7 @@ max = 40000
 test = 0
 
 # Load data from Aedat file.
-with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball_far.aedat4") as f:
+with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2021_08_24_10_44_21.aedat4") as f:
     events = np.hstack([packet for packet in f['events'].numpy()])
     timestamps, x, y, polarities = events['timestamp'], events['x'], events['y'], events['polarity']
 
@@ -138,6 +138,7 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball
         index1 = int(x_average) #Start looking at pixels to the right of the center
         flag = True
         no_hit = 0 #Track number of pixels in a row without a hit
+        hit_bool = False
         y_right = y_average #Look at pixels directly to the right of the center
 
         #Iterate through pixels left to right starting at the center and ending either at the right bound or the edge of the frame
@@ -157,6 +158,7 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball
             #If there's a hit, reset the no_hit counter since it only counts number of misses in a row
             if hit:
                 no_hit = 0
+                hit_bool = True
             #If there was no hit, increment the misses in a row counter
             else:
                 no_hit += 1
@@ -169,12 +171,17 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball
         if index1 == 345:
             x_right = 345
 
+        #If there was no hit at all, set the bound to 10 pixels to the right of the center
+        if hit_bool == False and x_average + 10 <= 345:
+            x_right = x_average + 10
+
 
         #CODE BELOW FINDS THE LEFT BOUND
         #See comments for right bound
         index1 = int(x_average)
         flag = True
         no_hit = 0
+        hit_bool = False
         y_left = y_average
 
         while flag and index1 > 0:
@@ -189,6 +196,7 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball
                 index2 += 1
             if hit:
                 no_hit = 0
+                hit_bool = True
             else:
                 no_hit += 1
             if no_hit > min_distance:
@@ -198,11 +206,15 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball
         if index1 == 1:
             x_left = 1
 
+        if hit_bool == False and x_average - 10 >= 1:
+            x_left = x_average - 10
+
         #CODE BELOW FINDS THE TOP BOUND
         #See comments for right bound
         index1 = int(y_average)
         flag = True
         no_hit = 0
+        hit_bool = False
         x_top = x_average
 
         while flag and index1 > 0:
@@ -217,14 +229,18 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball
                 index2 += 1
             if hit:
                 no_hit = 0
+                hit_bool = True
             else:
                 no_hit += 1
             if no_hit > min_distance:
                 flag = False
             index1 += 1
 
-        if index1 == 259:
-            y_top = 259
+        if index1 == 249:
+            y_top = 249
+
+        if hit_bool == False and y_average + 10 <= 249:
+            y_top = y_average + 10
 
 
         #CODE BELOW FINDS THE BOTTOM BOUND
@@ -232,6 +248,7 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball
         index1 = int(y_average)
         flag = True
         no_hit = 0
+        hit_bool = False
         x_bottom = x_average
 
         while flag and index1 > 0:
@@ -246,6 +263,7 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball
                 index2 += 1
             if hit:
                 no_hit = 0
+                hit_bool = True
             else:
                 no_hit += 1
             if no_hit > min_distance:
@@ -254,6 +272,9 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2022_01_25_13_32_20_tennis_ball
 
         if index1 == 1:
             y_bottom = 1
+
+        if hit_bool == False and y_average - 10 >= 1:
+            y_bottom = y_average - 10
 
         #Return the coordinates for the center of the object and the right, left, top, and bottom bounds
         return x_average, y_average, x_right, y_right, x_left, y_left, x_top, y_top, x_bottom, y_bottom
