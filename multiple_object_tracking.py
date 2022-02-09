@@ -665,7 +665,7 @@ with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2021_08_24_10_44_21.aedat4") as
         blue_patch = mpatches.Patch(color='blue', label='Second (-1) Filter output')
         title = "Time Increment: " + str(min) + " to " + str(max)
         plt.title(title)
-        plt.legend(handles=[red_patch, bisque_patch, blue_patch, skyblue_patch], loc=1)
+        plt.legend(handles=[red_patch, bisque_patch, blue_patch, skyblue_patch], bbox_to_anchor=(1,1), loc="upper left")
         plt.xlim(0, 350)
         plt.ylim(250, 0)
         plt.scatter(x_hits, y_hits, s=0.5, c='pink')
