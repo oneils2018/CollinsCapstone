@@ -19,31 +19,35 @@ import os
 #NOTE: CODE UNORIGINAL, numericalSort function obtained from
 # https://stackoverflow.com/questions/12093940/reading-files-in-a-particular-order-in-python
 #User: Martijn Pieters on Aug 23, 2012
-numbers = re.compile(r'(\d+)')
-def numericalSort(value):
-    parts = numbers.split(value)
-    parts[1::2] = map(int, parts[1::2])
-    return parts
 
-#image reading code obtained from
-#https://theailearner.com/2018/10/15/creating-video-from-images-using-opencv-python/
-#User: kang&atul on 15 Oct 2018
-img_array = []              #numpy array to store image information
-for filename in sorted(glob.glob(r'C:\Users\Stephen\Desktop\Collins_Capstone\*.png'), key=numericalSort):
-    img = cv2.imread(filename)
-    print("Reading image: ", filename)
-    height, width, layers = img.shape
-    size = (width, height)
-    img_array.append(img)
+def generate_video(file_path, output_name, del_toggle):
 
-
-output = cv2.VideoWriter('DV_saved-2021_08_24_11_13_45.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 15, size)
-
-for i in range(len(img_array)):
-    output.write(img_array[i])
-output.release()
-
-#the following code removes all png files from the directory to prevent old images being added to videos
-for filename in glob.glob(r'C:\Users\Stephen\Desktop\Collins_Capstone\*.png'):
-    os.remove(filename)
-
+    numbers = re.compile(r'(\d+)')
+    def numericalSort(value):
+        parts = numbers.split(value)
+        parts[1::2] = map(int, parts[1::2])
+        return parts
+    
+    #image reading code obtained from
+    #https://theailearner.com/2018/10/15/creating-video-from-images-using-opencv-python/
+    #User: kang&atul on 15 Oct 2018
+    img_array = []              #numpy array to store image information
+    for filename in sorted(glob.glob(file_path), key=numericalSort):
+        img = cv2.imread(filename)
+        print("Reading image: ", filename)
+        height, width, layers = img.shape
+        size = (width, height)
+        img_array.append(img)
+    
+    
+    output = cv2.VideoWriter(output_name + '.mp4', cv2.VideoWriter_fourcc(*'mp4v'), 15, size)
+    
+    for i in range(len(img_array)):
+        output.write(img_array[i])
+    output.release()
+    
+    #the following code removes all png files from the directory to prevent old images being added to videos
+    if del_toggle == True:
+        for filename in glob.glob(file_path):
+            os.remove(filename)
+            
