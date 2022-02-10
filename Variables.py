@@ -35,3 +35,6 @@ min_hits = 50
 
 # How much bigger should the box be then the object
 tolerance = 5
+
+# How many times should we iterate the tracking function before we give up
+max_tracking_iterations = 50
