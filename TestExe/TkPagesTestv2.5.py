@@ -428,6 +428,10 @@ class Page3(Page):
 
         ### GUI widgets placement, text, and commands. ###
 
+        # Initializing the variables for the option to turn off the tracker or legend
+        option1 = tk.IntVar() # Tracker
+        option2 = tk.IntVar() # Legend
+
         # Title of the page
         label03 = tk.Label(self, fg='#FF0000', text='Filter and tracking program:\n '
                                           '(Need to select .aedat4 file before starting filter/track!)\n '
@@ -442,6 +446,10 @@ class Page3(Page):
         searchButton1 = tk.Button(self, text='Search File', command=lambda: browseFiles1())
         searchButton2 = tk.Button(self, text='Search Results Directory', command=lambda: browseDirectory1())
 
+        # Options to turn off tracking or the legend
+        checkBox1 = tk.Checkbutton(self, text='Turn off the tracker', variable=option1, onvalue=1, offvalue=0)
+        checkBox2 = tk.Checkbutton(self, text='Turn off the legend', variable=option2, onvalue=1, offvalue=0)
+
         # Buttons to start and stop the algorithem.
         # They turn on when the user selects a file.
         # The stop restarts the program to stop the thread
@@ -454,16 +462,19 @@ class Page3(Page):
         # Grid location of entry fields, labels, and buttons
         label03.grid(column=0, row=0, columnspan=4, padx=10, pady=10)
 
-        fileCurrent1.grid(column=1, row=1, columnspan=100, padx=10, pady=20)
-        directoryCurrent1.grid(column=1, row=3, columnspan=100, padx=10, pady=20)
+        fileCurrent1.grid(column=1, row=1, columnspan=100, padx=10, pady=10)
+        directoryCurrent1.grid(column=1, row=3, columnspan=100, padx=10, pady=10)
 
-        searchButton1.grid(column=0, row=1, columnspan=1, padx=10, pady=20, sticky='ew')
+        searchButton1.grid(column=0, row=1, columnspan=1, padx=10, pady=10, sticky='ew')
         searchButton2.grid(column=0, row=3, columnspan=1, padx=10, pady=10, sticky='ew')
 
-        startButton1.grid(column=0, row=4, columnspan=1, padx=10, pady=20)
-        stopButton1.grid(column=1, row=4, columnspan=1, padx=10, pady=20)
+        checkBox1.grid(column=0, row=5, columnspan=1, padx=10, pady=10)
+        checkBox2.grid(column=0, row=6, columnspan=1, padx=10, pady=10)
 
-        pb1.grid(column=2, row=4, columnspan=2, padx=10, pady=20)
+        startButton1.grid(column=0, row=7, columnspan=1, padx=10, pady=10)
+        stopButton1.grid(column=1, row=7, columnspan=1, padx=10, pady=10)
+
+        pb1.grid(column=2, row=7, columnspan=2, padx=10, pady=10)
 
         # Defining the thread for the filter and tracking algorithm
         def thread1():
@@ -484,7 +495,10 @@ class Page3(Page):
                             vars[10],
                             vars[11],
                             vars[12],
-                            vars[13])
+                            vars[13],
+                            option1.get(),
+                            option2.get(),
+                            )
 
             # Stops progress bar animation
             pb1.stop()
@@ -525,6 +539,8 @@ class Page4(Page):
 
         ### GUI widgets placement, text, and commands. Similar to the ones in Page3 but modified for the PNGs to MP4 script. ###
 
+        option3 = tk.IntVar()  # Delete PNGs
+
         label04 = tk.Label(self, fg='#FF0000', text='Resulting PNGs to MP4 program:\n  '
                                                     '(Need to select a directory with PNGs)\n '
                                                     '(Output MP4 is in the same directory as the PNGs!)'
@@ -544,18 +560,20 @@ class Page4(Page):
         entryFileSaveName.insert(0, vars[14])
         vars[14] = entryFileSaveName.get()
 
-        fileSaveButton = tk.Button(self, text='Save file name', command=lambda: printValue(1))
+        fileSaveButton = tk.Button(self, text='Save file name', command=lambda: printValue(7))
 
         searchButton3 = tk.Button(self, text='Search Directory to Convert', command=lambda: browseDirectory2())
+
+        checkBox3 = tk.Checkbutton(self, text='Delete PNGs after making the video PERMANENTLY. (CAREFUL!)', variable=option3, onvalue=1, offvalue=0, fg='red')
 
         startButton2 = tk.Button(self, text='Start', command=lambda: [t2.start(), pb2.start()])
         stopButton2 = tk.Button(self, text='Stop', command=restartProgram)
 
         pb2 = tk.ttk.Progressbar(self, orient='horizontal', mode='indeterminate', length=100)
 
-        label04.grid(column=0, row=5, columnspan=4, padx=10, pady=10)
+        label04.grid(column=0, row=5, columnspan=3, padx=10, pady=10)
 
-        directoryCurrent2.grid(column=1, row=6, columnspan=100, padx=10, pady=20)
+        directoryCurrent2.grid(column=1, row=6, columnspan=100, padx=10, pady=10)
 
         fileSaveName1.grid(column=0, row=7, columnspan=1, padx=10, pady=10)
 
@@ -565,10 +583,12 @@ class Page4(Page):
 
         searchButton3.grid(column=0, row=6, columnspan=1, padx=10, pady=10, sticky='ew')
 
-        startButton2.grid(column=0, row=8, columnspan=1, padx=10, pady=20)
-        stopButton2.grid(column=1, row=8, columnspan=1, padx=10, pady=20)
+        checkBox3.grid(column=0, row=8, columnspan=3, padx=10, pady=10)
 
-        pb2.grid(column=2, row=8, columnspan=1, padx=10, pady=20)
+        startButton2.grid(column=0, row=9, columnspan=1, padx=10, pady=10)
+        stopButton2.grid(column=1, row=9, columnspan=1, padx=10, pady=10)
+
+        pb2.grid(column=2, row=9, columnspan=1, padx=10, pady=10)
 
         def thread2():
             if not os.path.isdir(vars[13]):
@@ -577,7 +597,7 @@ class Page4(Page):
             generateVideo(
                 vars[13],
                 vars[14],
-                False
+                option3.get(),
             )
             pb2.stop()
 
@@ -592,6 +612,15 @@ class Page4(Page):
             if not os.path.isdir(vars[13]):
                 os.makedirs(vars[13])
 
+        # Save entry and display saved message
+        def printValue(varNum):
+            vars[14] = entryFileSaveName.get()
+            label01 = tk.Label(self, text='Saved!', fg='green', bg='white')
+            label01.grid(column=3, row=varNum, pady=5)
+            self.after(500, lambda: label01.grid_remove())
+            print(vars[14])
+
+
 # The main tkinter frame to function as a top menue row of buttons
 class MainView(tk.Frame):
     def __init__(self, *args, **kwargs):
@@ -600,6 +629,7 @@ class MainView(tk.Frame):
         p2 = Page2(self)
         p3 = Page3(self)
         p4 = Page4(self)
+
 
         buttonframe = tk.Frame(self)
         container = tk.Frame(self)
@@ -611,16 +641,19 @@ class MainView(tk.Frame):
         p3.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         p4.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
 
+
         # Buttons to show the different pages
         b1 = tk.Button(buttonframe, text='Filter', command= p1.show)
         b2 = tk.Button(buttonframe, text='Tracking', command= p2.show)
         b3 = tk.Button(buttonframe, text='Run Filter and Tracking', command= p3.show)
         b4 = tk.Button(buttonframe, text='Convert to MP4', command= p4.show)
 
+
         b1.pack(side='left')
         b2.pack(side='left')
         b3.pack(side='left')
         b4.pack(side='left')
+
 
         # Start the GUI on Page1
         p1.show()
@@ -638,7 +671,10 @@ def filterTrackCode(timeRVar,
                     toleranceVar,
                     maxTIVar,
                     fileSelectVar,
-                    directorySelVar):
+                    directorySelVar,
+                    op1,
+                    op2,
+                    ):
 
     time_range = int(timeRVar)
     positive = int(positiveVar)
@@ -1078,11 +1114,17 @@ def filterTrackCode(timeRVar,
             blue_patch = mpatches.Patch(color='blue', label='Second (-1) Filter output')
             title = 'Time Increment: ' + str(min) + ' to ' + str(max)
             plt.title(title)
-            plt.legend(handles=[red_patch, bisque_patch, blue_patch, skyblue_patch], bbox_to_anchor=(1, 1), loc=2)
+
+            # Turn off the legend if the option was selected
+            if op2 == 0:
+             plt.legend(handles=[red_patch, bisque_patch, blue_patch, skyblue_patch], bbox_to_anchor=(1, 1), loc=2)
+
             plt.xlim(0, 350)
             plt.ylim(250, 0)
             plt.scatter(x_hits, y_hits, s=0.5, c='pink')
             plt.scatter(x_hits0, y_hits0, s=0.5, c='skyblue')
+
+
 
             # temporary variables for holding the output of the last tracking function
             temp_x_hits = x_combined
@@ -1096,54 +1138,63 @@ def filterTrackCode(timeRVar,
             x_inside1_n = np.empty(0)
             y_inside1_n = np.empty(0)
 
-            # Execute tracking function until we hit a certain number of loops or there are no pixels left to track
-            index = 0
-            while len(temp_x_hits) > 0 and index < max_tracking_iterations:
-                x_object, y_object, x_right, y_right, x_left, y_left, x_top, y_top, x_bottom, y_bottom, x_outside, y_outside, x_inside, y_inside = jitted_filter5(
-                    sample_size, min_distance, min_hits, tolerance, temp_x_hits, temp_y_hits)
+            # Turn off the tracker if the option was selected
+            if op1 == 0:
 
-                # Use updated list of pixels for the next function (will either have pixels deleted from the sample square not having enough pixels or from a box that was already drawn)
-                temp_x_hits = x_outside
-                temp_y_hits = y_outside
+                # Execute tracking function until we hit a certain number of loops or there are no pixels left to track
+                index = 0
+                while len(temp_x_hits) > 0 and index < max_tracking_iterations:
+                    x_object, y_object, x_right, y_right, x_left, y_left, x_top, y_top, x_bottom, y_bottom, x_outside, y_outside, x_inside, y_inside = jitted_filter5(
+                        sample_size, min_distance, min_hits, tolerance, temp_x_hits, temp_y_hits)
 
-                # If there wasn't enough pixels, don't draw a box
-                no_object = False
-                if x_object == 0 and y_object == 0:
-                    no_object = True
+                    # Use updated list of pixels for the next function (will either have pixels deleted from the sample square not having enough pixels or from a box that was already drawn)
+                    temp_x_hits = x_outside
+                    temp_y_hits = y_outside
 
-                if not no_object:
-                    # Draw square as well as the center, top, bottom, left, and right
-                    plt.scatter(x_object, y_object, s=10, c='g')
-                    plt.scatter(x_right, y_right, s=10, c='g')
-                    plt.scatter(x_left, y_left, s=10, c='g')
-                    plt.scatter(x_top, y_top, s=10, c='g')
-                    plt.scatter(x_bottom, y_bottom, s=10, c='g')
-                    rectangle = plt.Rectangle((x_left, y_bottom), x_right - x_left, y_top - y_bottom, fc='none',
-                                              ec='green')  # Draw rectangle around the object
-                    plt.gca().add_patch(rectangle)
+                    # If there wasn't enough pixels, don't draw a box
+                    no_object = False
+                    if x_object == 0 and y_object == 0:
+                        no_object = True
 
-                    # Find positive pixels inside all of the boxes drawn
-                    index1 = 0
-                    while index1 < len(x_hits):
-                        if x_hits[index1] <= x_right and x_hits[index1] >= x_left and y_hits[index1] <= y_top and \
-                                y_hits[index1] >= y_bottom:
-                            x_inside1_p = np.append(x_inside1_p, x_hits[index1])
-                            y_inside1_p = np.append(y_inside1_p, y_hits[index1])
-                        index1 += 1
+                    if not no_object:
+                        # Draw square as well as the center, top, bottom, left, and right
+                        plt.scatter(x_object, y_object, s=10, c='g')
+                        plt.scatter(x_right, y_right, s=10, c='g')
+                        plt.scatter(x_left, y_left, s=10, c='g')
+                        plt.scatter(x_top, y_top, s=10, c='g')
+                        plt.scatter(x_bottom, y_bottom, s=10, c='g')
+                        rectangle = plt.Rectangle((x_left, y_bottom), x_right - x_left, y_top - y_bottom, fc='none',
+                                                  ec='green')  # Draw rectangle around the object
+                        plt.gca().add_patch(rectangle)
 
-                    # Find negative pixels inside all of the boxes drawn
-                    index1 = 0
-                    while index1 < len(x_hits0):
-                        if x_hits0[index1] <= x_right and x_hits0[index1] >= x_left and y_hits0[index1] <= y_top and \
-                                y_hits0[index1] >= y_bottom:
-                            x_inside1_n = np.append(x_inside1_n, x_hits0[index1])
-                            y_inside1_n = np.append(y_inside1_n, y_hits0[index1])
-                        index1 += 1
-                index += 1
+                        # Find positive pixels inside all of the boxes drawn
+                        index1 = 0
+                        while index1 < len(x_hits):
+                            if x_hits[index1] <= x_right and x_hits[index1] >= x_left and y_hits[index1] <= y_top and \
+                                    y_hits[index1] >= y_bottom:
+                                x_inside1_p = np.append(x_inside1_p, x_hits[index1])
+                                y_inside1_p = np.append(y_inside1_p, y_hits[index1])
+                            index1 += 1
 
-            # Highlight pixels inside of boxes
-            plt.scatter(x_inside1_p, y_inside1_p, s=0.5, c='r')
-            plt.scatter(x_inside1_n, y_inside1_n, s=0.5, c='b')
+                        # Find negative pixels inside all of the boxes drawn
+                        index1 = 0
+                        while index1 < len(x_hits0):
+                            if x_hits0[index1] <= x_right and x_hits0[index1] >= x_left and y_hits0[index1] <= y_top and \
+                                    y_hits0[index1] >= y_bottom:
+                                x_inside1_n = np.append(x_inside1_n, x_hits0[index1])
+                                y_inside1_n = np.append(y_inside1_n, y_hits0[index1])
+                            index1 += 1
+                    index += 1
+
+                # Highlight pixels inside of boxes
+                plt.scatter(x_inside1_p, y_inside1_p, s=0.5, c='r')
+                plt.scatter(x_inside1_n, y_inside1_n, s=0.5, c='b')
+
+            # Highlight pixels based on if they passed 2 filters
+            else:
+                plt.scatter(x_hits, y_hits, s=0.5, c='r')
+                plt.scatter(x_hits0, y_hits0, s=0.5, c='b')
+
             plt.savefig(directorySelVar + str(index3), bbox_inches='tight')
             print(directorySelVar + str(index3) + '.png')
             plt.clf()
@@ -1152,7 +1203,7 @@ def filterTrackCode(timeRVar,
             min = min + increment
             max = max + increment
             index3 += 1
-            print(index3max)
+            #print(index3max)
 
 
 # NOTE: CODE UNORIGINAL, numericalSort function obtained from
@@ -1186,8 +1237,8 @@ def generateVideo(file_path, output_name, del_toggle):
     output.release()
 
     # The following code removes all png files from the directory to prevent old images being added to videos
-    if del_toggle == True:
-        for filename in glob.glob(file_path + '*.png'):
+    if del_toggle == 1:
+        for filename in glob.glob(file_path + '/' + '*.png'):
             os.remove(filename)
 
 # Main loop for tkinter to function
