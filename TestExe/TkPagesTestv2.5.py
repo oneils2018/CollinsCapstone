@@ -28,6 +28,7 @@ import tkinter as tk
 from tkinter import ttk
 
 # Allows the creation of hover over tooltips with tkinter
+# https://libraries.io/pypi/tkinter-tooltip
 from tktooltip import ToolTip
 
 # Allows using multiple threads for specific lines of code.
@@ -53,12 +54,30 @@ import re
 # Allows the script to interact with the os
 import os
 
+
 # Tkinter skeleton built off from:
 # https://stackoverflow.com/questions/14817210/using-buttons-in-tkinter-to-navigate-to-different-pages-of-the-application
 
-# Makes variables avaliable on all classes making them act as global variables
+# Makes variables available for all classes making them act as global variables
 class variables():
-    def __init__(self, *args, **kwargs):
+    def __init__(self,
+                 time_range,
+                 positive,
+                 max_distance,
+                 increment,
+                 min,
+                 max,
+                 sample_size,
+                 min_distance,
+                 min_hits,
+                 tolerance,
+                 max_tracking_iterations,
+                 fileSelect,
+                 directorySel,
+                 fileNameSet,
+                 object_name,
+                 train_split
+                 ):
 
         ############################
         ##### FILTER Variables #####
@@ -66,62 +85,67 @@ class variables():
 
         # The time_range is how far back in time and in the future of the current index does the program check for hits.
         # This has the largest hit on performance (Exponentially)
-        self.time_range = int
+        self.time_range = time_range
 
         # Positive is the minimum number of neighbor hits that must be attained for the hit to be added to the plot.
-        self.positive = int
+        self.positive = positive
 
         # The max_distance is the maximum distance in a 3d space
         # Where z is time that a hit must be under to be added to the plot.
-        self.max_distance = int
+        self.max_distance = max_distance
 
         # The increment is the duration of time stamps the program will process at a time then plot to a graph.
-        self.increment = int
+        self.increment = increment
 
         # The event number after the increment from which the filter starts
-        self.min = int
+        self.min = min
 
         # The number of events filtered into a single frame
-        self.max = int
+        self.max = max
 
         ##############################
         ##### TRACKING Variables #####
         ##############################
 
         # Determines how large a sample size we should take for averaging pixels to find the center of an object
-        self.sample_size = int
+        self.sample_size = sample_size
 
         # Threshold for number of misses in a row before we "give up" and use the last hit as a bound
-        self.min_distance = int
+        self.min_distance = min_distance
 
         # Minimum number of hits within a sample required to identify it as an object and draw a box
-        self.min_hits = int
+        self.min_hits = min_hits
 
         # How much bigger should the box be then the object
-        self.tolerance = int
+        self.tolerance = tolerance
 
         # How many times should we iterate the tracking function before we give up
-        self.max_tracking_iterations = int
+        self.max_tracking_iterations = max_tracking_iterations
 
-        #########################
-        ##### GUI Variables #####
-        #########################
+        #############################
+        ##### GUI/Etc Variables #####
+        #############################
 
-        # GUI selected file path for filtering and tracking
-        self.fileSelect = ''
+        # Selected file path for filtering and tracking
+        self.fileSelect = fileSelect
 
-        # GUI selected directory to convert into mp4
-        self.directorySel = ''
+        # Selected directory to convert into mp4
+        self.directorySel = directorySel
 
-        # GUI save filename for video
-        self.fileNameSet = ''
+        # Filename for the video
+        self.fileNameSet = fileNameSet
 
+        # Parent directory name for the test/train split script for classification reasons (Cube, Plane, Cone, etc)
+        self.object_name = object_name
+
+        # Specify percentage of files to be placed into each test/train folder (expecting floats like 0.6, 0.8, 0.9)
+        self.train_split = train_split
 
 # Obtains the current directory of this file and attach a new folder for script results
 directoryPath = os.path.join(os.path.dirname(__file__), 'Results\\')
 
-# Global default values of variables
-defaultVals = ['zero',              # ('zero' or 0 is always used to bump array by one)
+# Unchanging global default values of variables
+defaultVals = ['zero',              # 'zero' or 0 is always used to bump array by one
                7,                   # time range (filter)
                2,                   # positive (filter)
                10,                  # max distance (filter)
@@ -131,47 +155,56 @@ defaultVals = ['zero',              # ('zero' or 0 is always used to bump array 
                40,                  # sample size (tracking)
                10,                  # min distance (tracking)
                50,                  # min hits (tracking)
-               5,                   # tolarance (tracking)
+               5,                   # tolerance (tracking)
                50,                  # max tracking distance (tracking)
                '',                  # file select (GUI)
                directoryPath,       # directory select (GUI)
-               'Default'            # file name set (GUI)
+               'Default',           # file name set (GUI)
+               'Object_Name',       # test/train parent directory
+               0.8,                 # test/train percentage
                ]
 
 # Initially set all variables to their default values
-variables.time_range = defaultVals[1]
-variables.positive = defaultVals[2]
-variables.max_distance = defaultVals[3]
-variables.increment = defaultVals[4]
-variables.min = defaultVals[5]
-variables.max = defaultVals[6]
-variables.sample_size = defaultVals[7]
-variables.min_distance = defaultVals[8]
-variables.min_hits = defaultVals[9]
-variables.tolerance = defaultVals[10]
-variables.max_tracking_iterations = defaultVals[11]
-variables.fileSelect = defaultVals[12]
-variables.directorySel = defaultVals[13]
-variables.fileNameSet = defaultVals[14]
+v1 = variables(defaultVals[1],
+               defaultVals[2],
+               defaultVals[3],
+               defaultVals[4],
+               defaultVals[5],
+               defaultVals[6],
+               defaultVals[7],
+               defaultVals[8],
+               defaultVals[9],
+               defaultVals[10],
+               defaultVals[11],
+               defaultVals[12],
+               defaultVals[13],
+               defaultVals[14],
+               defaultVals[15],
+               defaultVals[16],
+               )
 
-# Places all global variables into an array
-vars = ['zero',                             # 0
-        variables.time_range,               # 1
-        variables.positive,                 # 2
-        variables.max_distance,             # 3
-        variables.increment,                # 4
-        variables.min,                      # 5
-        variables.max,                      # 6
-        variables.sample_size,              # 7
-        variables.min_distance,             # 8
-        variables.min_hits,                 # 9
-        variables.tolerance,                # 10
-        variables.max_tracking_iterations,  # 11
-        variables.fileSelect,               # 12
-        variables.directorySel,             # 13
-        variables.fileNameSet,              # 14
+
+# Places all global variables into an array for loops. Each variable can be used without using this array.
+vars = ['zero',                     # 0
+        v1.time_range,              # 1
+        v1.positive,                # 2
+        v1.max_distance,            # 3
+        v1.increment,               # 4
+        v1.min,                     # 5
+        v1.max,                     # 6
+        v1.sample_size,             # 7
+        v1.min_distance,            # 8
+        v1.min_hits,                # 9
+        v1.tolerance,               # 10
+        v1.max_tracking_iterations, # 11
+        v1.fileSelect,              # 12
+        v1.directorySel,            # 13
+        v1.fileNameSet,             # 14
+        v1.object_name,             # 15
+        v1.train_split              # 16
         ]
 
+# Text for tooltip popups when hovering over an item
 toolTips = ['zero',
             'The time_range is how far back in time and in the future of the current index does the program check for hits. This has the largest hit on performance (Exponentially).',
             'Positive is the minimum number of neighbor hits that must be attained for the hit to be added to the plot.',
@@ -184,9 +217,14 @@ toolTips = ['zero',
             'Minimum number of hits within a sample required to identify it as an object and draw a box.',
             'How much bigger should the box be then the object.',
             'How many times should we iterate the tracking function before we give up.',
+            '',
+            '',
+            '',
+            'The name of the object being split for classification reasons (Cube, Plane, Cone, etc). Will be the name of the parent folder of the test/train split data.',
+            'specify percentage of files to be placed into each train/test folder (expecting floats like 0.6, 0.8, 0.9)',
             ]
 
-# Array of entry boxes and their intended uses per variable
+# Array of entry boxes and their intended use per variable
 entry = ['zero',                    # 0
          'Time Range',              # 1
          'Positive Hits',           # 2
@@ -202,25 +240,12 @@ entry = ['zero',                    # 0
          'File select',             # 12
          'Directory Select',        # 13
          'File Name Set',           # 14
+         'Object Name',             # 15
+         'Train Split',             # 16
          ]
 
 # Array of string names of the variables
-varName = ['zero',                      # 0
-           'Time Range',                # 1
-           'Positive Hits',             # 2
-           'Max Distance',              # 3
-           'Increment',                 # 4
-           'Min',                       # 5
-           'Max',                       # 6
-           'Sample Size',               # 7
-           'Min Distance',              # 8
-           'Min Hits',                  # 9
-           'Tolerance',                 # 10
-           'Max Tracking Iterations',   # 11
-           'File Destination',          # 12
-           'Directory Select',          # 13
-           'File Name Set',             # 14
-           ]
+varName = entry.copy()
 
 # Array for save buttons
 saveButton = list(range(1,100))
@@ -228,8 +253,8 @@ saveButton = list(range(1,100))
 # Restarts the program
 def restartProgram():
     root.destroy()
-    os.startfile('tkPagesTestv2.py')
-    os.startfile('tkPagesTestv2.exe')
+    os.startfile('tkPagesTestv2.5.py')
+    os.startfile('tkPagesTestv2.5.exe')
 
 # Create frame around tkinter pages
 class Page(tk.Frame):
@@ -238,7 +263,6 @@ class Page(tk.Frame):
 
     def show(self):
         self.lift()
-
 
 # Filter variables screen
 class Page1(Page):
@@ -250,7 +274,6 @@ class Page1(Page):
         while i <= 6:
             entry[i] = tk.Entry(self)
             entry[i].insert(0, vars[i])
-            # print(vars[i])
             i += 1
 
         ### GUI widgets placement, text, and commands ###
@@ -336,8 +359,7 @@ class Page1(Page):
             label0 = tk.Label(self, text=str(varName[num]) + ' Saved!', fg='green', bg='white')
             label0.grid(column=3, row=num, pady=5)
             self.after(500, lambda: label0.grid_remove())
-            print(vars[num])
-
+            print(f'{varName[num]} = {vars[num]}')
 
 # Tracking variables screen
 class Page2(Page):
@@ -419,7 +441,7 @@ class Page2(Page):
             label0 = tk.Label(self, text=str(varName[num]) + ' Saved!', fg='green', bg='white')
             label0.grid(column=3, row=num + 2, pady=5)
             self.after(500, lambda: label0.grid_remove())
-            print(vars[num])
+            print(f'{varName[num]} = {vars[num]}')
 
 # Run scripts screen
 class Page3(Page):
@@ -531,8 +553,7 @@ class Page3(Page):
             vars[13] = tk.filedialog.askdirectory() + '/'
             directoryCurrent1.config(text='Directory Selected: ' + vars[13], anchor="w")
 
-
-# Run scripts screen
+# Run PNGs to MP4 screen
 class Page4(Page):
     def __init__(self, *args, **kwargs):
         Page.__init__(self, *args, **kwargs)
@@ -560,9 +581,9 @@ class Page4(Page):
         entryFileSaveName.insert(0, vars[14])
         vars[14] = entryFileSaveName.get()
 
-        fileSaveButton = tk.Button(self, text='Save file name', command=lambda: printValue(7))
+        fileSaveButton = tk.Button(self, text='Save file name', command=lambda: printValue(14))
 
-        searchButton3 = tk.Button(self, text='Search Directory to Convert', command=lambda: browseDirectory2())
+        searchButton3 = tk.Button(self, text='Search directory to convert', command=lambda: browseDirectory2())
 
         checkBox3 = tk.Checkbutton(self, text='Delete PNGs after making the video PERMANENTLY. (CAREFUL!)', variable=option3, onvalue=1, offvalue=0, fg='red')
 
@@ -594,10 +615,9 @@ class Page4(Page):
             if not os.path.isdir(vars[13]):
                 os.makedirs(vars[13])
 
-            generateVideo(
-                vars[13],
-                vars[14],
-                option3.get(),
+            generateVideo(vars[13],
+                          vars[14],
+                          option3.get(),
             )
             pb2.stop()
 
@@ -613,15 +633,106 @@ class Page4(Page):
                 os.makedirs(vars[13])
 
         # Save entry and display saved message
-        def printValue(varNum):
-            vars[14] = entryFileSaveName.get()
+        def printValue(num):
+            vars[num] = entryFileSaveName.get()
             label01 = tk.Label(self, text='Saved!', fg='green', bg='white')
-            label01.grid(column=3, row=varNum, pady=5)
+            label01.grid(column=3, row=num - 7, pady=5)
             self.after(500, lambda: label01.grid_remove())
-            print(vars[14])
+            print(f'{varName[num]} = {vars[num]}')
 
+# Run test/train split screen
+class Page5(Page):
+    def __init__(self, *args, **kwargs):
+        Page.__init__(self, *args, **kwargs)
 
-# The main tkinter frame to function as a top menue row of buttons
+        ### GUI widgets placement, text, and commands. Similar to the ones in Page4 but modified for the split data script. ###
+
+        label05 = tk.Label(self, fg='#FF0000', text='Split resulting PNGs to testing and training sets:\n  '
+                                                    '(Need to select a directory with PNGs)\n '
+                                                    '(Output directory is in the same folder as PNGs)'
+                           )
+
+        # Declares the directory label and updates the diplayed label when it changes
+        directoryCurrent3 = tk.Label(self, text='Directory to Split: ' + vars[13], anchor="w")
+        def update():
+            directoryCurrent3.config(text='Directory to Split: ' + vars[13], anchor="w")
+            self.after(1000, update)
+        update()
+
+        dirSaveNameLabel = tk.Label(self, text='Split result directory name:')
+        splitPercentLabel = tk.Label(self, text='Split percent to be for training:')
+
+        # Declares directory object name entry filed and put in the default string
+        entry[15] = tk.Entry(self)
+        entry[15].insert(0, vars[15])
+        vars[15] = entry[15].get()
+
+        # Declares percent to split entry filed and put in the default value
+        entry[16] = tk.Entry(self)
+        entry[16].insert(0, vars[16])
+        vars[16] = entry[16].get()
+
+        dirSaveButton = tk.Button(self, text='Save directory name', command=lambda: printValue(15))
+        splitSaveButton = tk.Button(self, text='Save percent', command=lambda: printValue(16))
+
+        searchButton3 = tk.Button(self, text='Search Directory to Split', command=lambda: browseDirectory3())
+
+        startButton2 = tk.Button(self, text='Start', command=lambda: [t3.start(), pb3.start()])
+        stopButton2 = tk.Button(self, text='Stop', command=restartProgram)
+
+        pb3 = tk.ttk.Progressbar(self, orient='horizontal', mode='indeterminate', length=100)
+
+        label05.grid(column=0, row=5, columnspan=3, padx=10, pady=10)
+
+        directoryCurrent3.grid(column=1, row=6, columnspan=100, padx=10, pady=10)
+
+        dirSaveNameLabel.grid(column=0, row=7, columnspan=1, padx=10, pady=10)
+        splitPercentLabel.grid(column=0, row=8, columnspan=1, padx=10, pady=10)
+
+        entry[15].grid(column=1, row=7, columnspan=1, padx=5, pady=5)
+        entry[16].grid(column=1, row=8, columnspan=1, padx=5, pady=5)
+
+        dirSaveButton.grid(column=2, row=7, columnspan=1, padx=10, pady=10)
+        splitSaveButton.grid(column=2, row=8, columnspan=1, padx=10, pady=10)
+
+        searchButton3.grid(column=0, row=6, columnspan=1, padx=10, pady=10, sticky='ew')
+
+        startButton2.grid(column=0, row=9, columnspan=1, padx=10, pady=10)
+        stopButton2.grid(column=1, row=9, columnspan=1, padx=10, pady=10)
+
+        pb3.grid(column=2, row=9, columnspan=1, padx=10, pady=10)
+
+        def thread3():
+            if not os.path.isdir(vars[13]):
+                os.makedirs(vars[13])
+
+            test_train_split(vars[13],
+                             vars[15],
+                             float(vars[16]),
+            )
+            pb3.stop()
+            print(vars[13])
+
+        t3 = threading.Thread(target=thread3)
+
+        t3.daemon = True
+
+        def browseDirectory3():
+            vars[13] = tk.filedialog.askdirectory()
+            directoryCurrent3.config(text='Directory Selected: ' + vars[13], anchor="w")
+
+            if not os.path.isdir(vars[13]):
+                os.makedirs(vars[13])
+
+        # Save entry and display saved message
+        def printValue(num):
+            vars[num] = entry[num].get()
+            label01 = tk.Label(self, text='Saved!', fg='green', bg='white')
+            label01.grid(column=3, row=num - 8, pady=5)
+            self.after(500, lambda: label01.grid_remove())
+            print(f'{varName[num]} = {vars[num]}')
+
+# The main tkinter frame to function as a top menu row of buttons
 class MainView(tk.Frame):
     def __init__(self, *args, **kwargs):
         tk.Frame.__init__(self, *args, **kwargs)
@@ -629,6 +740,7 @@ class MainView(tk.Frame):
         p2 = Page2(self)
         p3 = Page3(self)
         p4 = Page4(self)
+        p5 = Page5(self)
 
 
         buttonframe = tk.Frame(self)
@@ -640,19 +752,22 @@ class MainView(tk.Frame):
         p2.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         p3.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
         p4.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
+        p5.place(in_=container, x=0, y=0, relwidth=1, relheight=1)
 
 
         # Buttons to show the different pages
-        b1 = tk.Button(buttonframe, text='Filter', command= p1.show)
-        b2 = tk.Button(buttonframe, text='Tracking', command= p2.show)
-        b3 = tk.Button(buttonframe, text='Run Filter and Tracking', command= p3.show)
-        b4 = tk.Button(buttonframe, text='Convert to MP4', command= p4.show)
+        b1 = tk.Button(buttonframe, text='Filter', command=p1.show)
+        b2 = tk.Button(buttonframe, text='Tracking', command=p2.show)
+        b3 = tk.Button(buttonframe, text='Run Algorithms', command=p3.show)
+        b4 = tk.Button(buttonframe, text='Convert to MP4', command=p4.show)
+        b5 = tk.Button(buttonframe, text='Split Data', command=p5.show)
 
-
+        # Placing buttons on the top left of the window
         b1.pack(side='left')
         b2.pack(side='left')
         b3.pack(side='left')
         b4.pack(side='left')
+        b5.pack(side='left')
 
 
         # Start the GUI on Page1
@@ -1240,6 +1355,52 @@ def generateVideo(file_path, output_name, del_toggle):
     if del_toggle == 1:
         for filename in glob.glob(file_path + '/' + '*.png'):
             os.remove(filename)
+
+#Developed by Stephen O'Neil 2/21/2022
+#Original Code
+#file_path (string) is the working directory where the pngs can be found and where object training test split folders will be created
+#object_name (string) is the name of the object being split for classification reasons (Cube, Plane, Cone, etc)
+#train_split (float) used to specify percentage of files to be placed into each train/test folder (expecting floats like 0.6, 0.8, 0.9)
+#could be modified to accept other values
+
+def test_train_split(file_path, object_name, train_split):
+
+    n = 0   #variable for number of files to be split
+
+    parent_path = os.path.join(file_path, object_name)  #parent directory (named after object i.e. cube, cone, quadcopter, etc)
+    train_path  = os.path.join(parent_path, r"train")   #train path to folder inside parent_path, labeled as train
+    test_path = os.path.join(parent_path, r"test")      #same as train_path but labeled as test
+    try:
+        #attempts to create 3 new directories, one labeled after object and two inside the first labeled as train, test
+        os.mkdir(parent_path)
+        os.mkdir(train_path)
+        os.mkdir(test_path)
+
+    except OSError as error:
+        #prints error if filenames already exists (can be ignored, program will continue normally)
+        print(error)
+
+    for filename in glob.glob(file_path + r"\*.png"):
+        n += 1  # gets num of png files to split
+
+    print("Found " + str(n) + " png files in directory " + file_path)
+
+
+    i = 0                           #used for naming files/counting index for train/test split
+    index = int(n * train_split)    #whatever percentage of total number of files to be put into train
+
+    for filename in glob.glob(file_path + r"\*.png"):
+        #iterates through working directory and moves i number of png files into training split
+        if i < index:
+            os.replace(filename, train_path + "\\" + str(i) + ".png")
+
+            i += 1
+        else:
+            break   #moves onto test split
+    for filename in glob.glob(file_path + r"\*.png"):
+        #moves remaining pngs in file into test split folder
+        os.replace(filename, test_path + "\\" + str(i) + ".png")
+        i += 1
 
 # Main loop for tkinter to function
 if __name__ == '__main__':
