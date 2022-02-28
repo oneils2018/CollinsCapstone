@@ -1,5 +1,8 @@
 #### Main Function operation variables ####
-make_test_data = True
+
+#Used to make the main function generate test images to train a tensorflow model,
+#or to use a trained model to classify data and output the saved images.
+make_test_data = False
 
 
 
