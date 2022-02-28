@@ -27,7 +27,7 @@ test = 0
 
 # Load data from Aedat file.
 #with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2021_08_24_10_44_21.aedat4") as f:
-with AedatFile(r"F:\Capstone - Copy\Working_Directory\Classification Data\Cube_processing\Cube and Cone\dvSave-2022_02_21_14_13_04_cube_and_cone.aedat4") as f:
+with AedatFile(r"F:\Capstone\CollinsCapstone\dvSave-2022_02_21_14_13_04_cube_and_cone.aedat4") as f:
     events = np.hstack([packet for packet in f['events'].numpy()])
     timestamps, x, y, polarities = events['timestamp'], events['x'], events['y'], events['polarity']
 
@@ -41,45 +41,40 @@ with AedatFile(r"F:\Capstone - Copy\Working_Directory\Classification Data\Cube_p
         # Call filter10 and return the data to x_hits0 and y_hits0.
         x_hits0, y_hits0 = jitted_filter10(events, min, max)
 
-        x_hits = np.array(x_hits)
-        y_hits = np.array(y_hits)
-
-        x_hits0 = np.array(x_hits0)
-        y_hits0 = np.array(y_hits0)
-
+        # Prints filter data to console.
         print("Total points on plot after first (+1) filter: ", len(x_hits))
         print("Total points on plot after first (-1) filter: ", len(x_hits0))
 
+        # This while loop runs the second filter multiple times to remove any excess noise.
         index = 0
         while index < 7:
             x_hits, y_hits = jitted_filter2(x_hits, y_hits)
             x_hits0, y_hits0 = jitted_filter2(x_hits0, y_hits0)
             index += 1
 
-        # Combine pixels of 1 and -1 polarity
-        x_combined = np.concatenate((x_hits, x_hits0))
-        y_combined = np.concatenate((y_hits, y_hits0))
-
-        # Prints time to console
+        # Prints time and filter information to console.
         total_time = round((time.time() - start_time), 2)
         print("Total points on plot after second (+1) filter: ", len(x_hits))
         print("Total points on plot after second (-1) filter: ", len(x_hits0))
         print("Execution time: %s seconds" % (total_time))
         print("On Image #", index3)
 
-        plt.xlim(0, 350)
-        plt.ylim(250, 0)
-        plt.axis('off')
-        #plt.xlim(0, 350)
-        #plt.ylim(250, 0)
 
         #Calls the jitted dualpolarityplotter function and stores the values in xdouble_hits and ydouble_hits
         xdouble_hits,ydouble_hits = jitted_dualpolarityplotter(x_hits,y_hits,x_hits0,y_hits0)
 
+        #Adds the found hits to the plot function.
         plt.scatter(x_hits, y_hits, s=1, c='red')
         plt.scatter(x_hits0, y_hits0, s=1, c='blue')
         plt.scatter(xdouble_hits, ydouble_hits, s=11, c='purple')
-        
+
+        # Combine pixels of 1 and -1 polarity.
+        x_combined = np.concatenate((x_hits, x_hits0))
+        y_combined = np.concatenate((y_hits, y_hits0))
+
+        #calls the object tracking function to draw boxes around objects found within image, extract the zoomed in images found within boxes,
+        #and if make_test_data is set to True saves said images, if not it will use them to classify objects detected, delete the zoomed images, then save
+        #an image showing the models predictions.
         object_tracking(x_combined,y_combined,index3,x_hits,y_hits,x_hits0,y_hits0)
         
         #Define double polarity hit arrays
