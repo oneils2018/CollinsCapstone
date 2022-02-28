@@ -6,7 +6,7 @@ import cv2
 from keras.preprocessing import image
 
 #Load trained model
-loaded_model = tf.keras.models.load_model('Cube_Cone_Model.h5')
+loaded_model = tf.keras.models.load_model('tensorflow_model.h5')
 
 def image_classifier(index,index3):
     img = image.load_img(str(index3)+"zoom"+str(index)+".png", target_size=(480, 640))
