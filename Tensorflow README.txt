@@ -6,4 +6,4 @@ https://drive.google.com/file/d/1IeBYIqjMfTfcQVr6pW-VIqHP-cFar_-D/view?usp=shari
 
 
 Here is the link to the google colab notebook containing the tensorflow model training code:
-https://drive.google.com/file/d/1IeBYIqjMfTfcQVr6pW-VIqHP-cFar_-D/view?usp=sharing
+https://colab.research.google.com/drive/18P014j4ePPQMr0vTkuVf0Oyw_M81OtjJ?usp=sharing
