@@ -14,6 +14,9 @@ import glob
 # cv2 reads files in alphabetical order(not numerical) so 10 is read before 9
 import re
 
+#used to select random file in working directory (prevent overfitting in model)
+import random
+
 # Allows the script to interact with the os
 import os
 
@@ -65,15 +68,23 @@ def test_train_split(file_path, object_name, train_split):
     parent_path = os.path.join(file_path, object_name)  #parent directory (named after object i.e. cube, cone, quadcopter, etc)
     train_path  = os.path.join(parent_path, r"train")   #train path to folder inside parent_path, labeled as train
     test_path = os.path.join(parent_path, r"test")      #same as train_path but labeled as test
-    try:
-        #attempts to create 3 new directories, one labeled after object and two inside the first labeled as train, test
+    
+    # attempts to create 3 new directories, one labeled after object and two inside the first labeled as train, test
+    #prints message if folders already exist
+    try:    #parent folder
         os.mkdir(parent_path)
-        os.mkdir(train_path)
-        os.mkdir(test_path)
+    except OSError:
+        print(parent_path + " already exists in working directory")
 
-    except OSError as error:
-        #prints error if filenames already exists (can be ignored, program will continue normally)
-        print(error)
+    try:    #train folder
+        os.mkdir(train_path)
+    except OSError:
+        print(train_path + " already exists in working directory")
+
+    try:    #test folder
+        os.mkdir(test_path)
+    except OSError:
+        print(test_path + " already exists in working directory")
 
     for filename in glob.glob(file_path + r"\*.png"):
         n += 1  # gets num of png files to split
@@ -84,15 +95,18 @@ def test_train_split(file_path, object_name, train_split):
     i = 0                           #used for naming files/counting index for train/test split
     index = int(n * train_split)    #whatever percentage of total number of files to be put into train
 
-    for filename in glob.glob(file_path + r"\*.png"):
-        #iterates through working directory and moves i number of png files into training split
-        if i < index:
-            os.replace(filename, train_path + "\\" + str(i) + ".png")
+    #while loop will iterate i number of times (i value based off of split percentage)
+    while i < index:
+        file_names = glob.glob(file_path + r"\*.png")    #creates a python list of all .png files located in file_path
+        file = random.choice(file_names)                 #selects a random png file from file_names list
+        print(os.path.basename(file))
+        os.replace(file, train_path + "\\" + os.path.basename(file))    #move randomly selected file
+                                            #os.path.basename() gets actual file name, i.e. '0.png'
 
-            i += 1
-        else:
-            break   #moves onto test split
+        i += 1
+
+    #following loop will take all remaining png files not selected and place them into the test folder
     for filename in glob.glob(file_path + r"\*.png"):
         #moves remaining pngs in file into test split folder
-        os.replace(filename, test_path + "\\" + str(i) + ".png")
+        os.replace(filename, test_path + "\\" + os.path.basename(filename))
         i += 1
