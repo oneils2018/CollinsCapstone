@@ -3,11 +3,43 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import math as math
-# numba is a library that must be install by running "pip install numba" It takes a function and re-writes in machine code to run extremely fast. It works best if numpy arrays are used.
 from scipy import stats
 from dv import AedatFile
 import os
 from functions import *
+
+
+### IMPORTANT INFORMATION ON HOW TO READ THESE SCRIPTS ###
+
+# The code within this program is organized as such:
+# The main.py is the python script that runs the code. It is responsible for loading the davis camera recordins, and then using funcions defined in other files to filter the data
+# and save the resulting images within the folder it is run in.
+
+# Most functions you will see below have jitted_ in front of them. This is a function that has been passed to the numba library to convert them to machine code that makes them run much faster.
+# If you are trying to follow the function calling path, go to the file name after the jitted_ within the folder that the main.py is located.
+
+# Right now, the main.py includes a functions.py file, which contains a python script that includes all the other functions within the program.
+
+# The order in which functions are called within this file work as such:
+# 1. Loads the aedat4 file -> only if it has not already be loaded in a previous loop.
+
+# 2. pass the data to the filter1 function and the filter10 function. Each output is stored seperatly.
+
+# 3. Results of both filters are independently sent to filter2. Filter2 is run multiple times, as each runtrhough, a number of points are removed.
+
+# 4. After going through filter2, both results are passed to a function called dual_pollarity_filter. This function takes points that are found in both the 0 and 1 polarities at the same x and y
+# coordinates, and plots them in purple. Without this, all 0 polarity points at the same x and y coords will be completely overshadowed by the 1 polarity hits. These points are stored in a third array,
+# and the 2 different 1 and 0 hit polarity arrays remain unchanged.
+
+# 5. The 0 and 1 polarity arrays are combined into a new array that is passed to the object_tracking function. This function draws boxes around the filtered objects detected.
+# Note that within the object_tracking function is a call to another function called image_classifier. This function is called depending on a user defined variable make_test_data.
+# It classifies objects based on a trained tensorflow model.
+
+# 6. Results are saved to the local directory of the main.py file. The program will loops through this process over and over until it reaches the end of the aedat4 file.
+
+## NOTE: Descriptions on what each function actually done can be found within their respective file.
+
+
 
 
 #Start_Time is set to 0 here, used to track execution time.
@@ -21,12 +53,12 @@ start_time = time.time()
 ## before passing it to filter 2.
 
 
+#Defines the initial time frame
 min = 0
 max = 5000
 test = 0
 
 # Load data from Aedat file.
-#with AedatFile(r"C:\Users\jerem\Downloads\dvSave-2021_08_24_10_44_21.aedat4") as f:
 with AedatFile(r"F:\Capstone\CollinsCapstone\dvSave-2022_02_21_14_13_04_cube_and_cone.aedat4") as f:
     events = np.hstack([packet for packet in f['events'].numpy()])
     timestamps, x, y, polarities = events['timestamp'], events['x'], events['y'], events['polarity']
