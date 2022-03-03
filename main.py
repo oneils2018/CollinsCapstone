@@ -34,7 +34,7 @@ from functions import *
 # 5. The 0 and 1 polarity arrays are combined into a new array that is passed to the object_tracking function. This function draws boxes around the filtered objects detected.
 # Note that within the object_tracking function is a call to another function called image_classifier. This function is called depending on a user defined variable make_test_data.
 # It classifies objects based on a trained tensorflow model.
-# If make_test_data is set to True, it will output the zoomed in images of objects found within the boxes. If False, it outputs the whole image tracked objects having a predicted label above them.
+# If make_test_data is set to True, it will output the zoomed in images of objects found within the boxes. If False, it outputs the whole image with tracked objects having a predicted label above them.
 
 # 6. Results are saved to the local directory of the main.py file. The program will loops through this process over and over until it reaches the end of the aedat4 file.
 
