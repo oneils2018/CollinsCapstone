@@ -28,7 +28,7 @@ from functions import *
 # 3. Results of both filters are independently sent to filter2. Filter2 is run multiple times, as each runtrhough, a number of points are removed.
 
 # 4. After going through filter2, both results are passed to a function called dual_pollarity_filter. This function takes points that are found in both the 0 and 1 polarities at the same x and y
-# coordinates, and plots them in purple. Without this, all 0 polarity points at the same x and y coords will be completely overshadowed by the 1 polarity hits. These points are stored in a third array,
+# coordinates, and plots them in purple. Without this, all 0 polarity points at the same x and y coords will be completely overshadowed by the 1 polarity hits with the same coordinates. These points are stored in a third array,
 # and the 2 different 1 and 0 hit polarity arrays remain unchanged.
 
 # 5. The 0 and 1 polarity arrays are combined into a new array that is passed to the object_tracking function. This function draws boxes around the filtered objects detected.
@@ -37,7 +37,7 @@ from functions import *
 
 # 6. Results are saved to the local directory of the main.py file. The program will loops through this process over and over until it reaches the end of the aedat4 file.
 
-## NOTE: Descriptions on what each function actually done can be found within their respective file.
+## NOTE: Descriptions on what each function actually do can be found within their respective file.
 
 
 
