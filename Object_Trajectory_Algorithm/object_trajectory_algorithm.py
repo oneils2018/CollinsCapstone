@@ -9,7 +9,7 @@ from numba import jit, njit, vectorize
 from scipy import stats
 from dv import AedatFile
 import os
-from Variables import *
+from variables import *
 
 #MODIFIED MATTHEW'S AND JEREMY'S CODE TO INCLUDE SEPERATE VARIABLES FILE
 
@@ -567,8 +567,45 @@ with AedatFile(r"C:\Users\jerem\OneDrive\Desktop\UML\Object_Trajectory_Algorithm
     #Plot 3D figure
     threeD = plt.figure()
     ax = threeD.add_subplot(111, projection='3d')
+    ax.set_xlabel("X")
+    ax.set_ylabel("Z")
+    ax.set_zlabel("Y")
     ax.set_xlim(0, 350)
     ax.set_ylim(0, 350)
     ax.set_zlim(0, 250)
-    ax.scatter(x_center, z_center, y_center)
+
+    ax.scatter(x_center, z_center, y_center, color='black') #Plot points
+
+    #Arrays containing phi and theta angles for 3D vectors
+    pose_phi = np.empty(0)
+    pose_theta = np.empty(0)
+
+    #Calculate angles for vectors and plot them as arrows
+    i = 1
+    while i < len(x_center) - 1: #Do not calculate vectors for first and last points
+        #phi1/theta1 are angles for vector from previous point to current point
+        phi1 = np.arctan((x_center[i + 1] - x_center[i]) / (z_center[i + 1] - z_center[i]))
+        theta1 = np.arctan((y_center[i + 1] - y_center[i]) / np.sqrt(np.square(x_center[i + 1] - x_center[i]) + np.square(z_center[i + 1] - z_center[i])))
+
+        #phi2/theta2 are angles for vector from current point to next point
+        phi2 = np.arctan((x_center[i] - x_center[i - 1]) / (z_center[i] - z_center[i - 1]))
+        theta2 = np.arctan((y_center[i] - y_center[i - 1]) / np.sqrt(np.square(x_center[i] - x_center[i - 1]) + np.square(z_center[i] - z_center[i - 1])))
+
+        #Average vectors before and after current point to get vector of current point
+        phi = (phi1 + phi2) / 2
+        pose_phi = np.append(pose_phi, 180 - np.degrees(phi)) #Phi is flipped for ease of view because z axis is flipped
+        theta = (theta1 + theta2) / 2
+        pose_theta = np.append(pose_theta, theta)
+
+        print("Pose " + str(i - 1) + ": " + "phi = " + str(180 - np.degrees(phi)) + ", theta = " + str(np.degrees(theta)))
+
+        #Show arrows on graph
+        x_point = 25 * np.sin(phi)
+        z_point = 25 * np.cos(phi)
+        y_point = 25 * np.sin(theta)
+        ax.quiver(x_center[i], z_center[i], y_center[i], x_point, z_point, y_point, length=15, normalize=True, arrow_length_ratio=0.1)
+        ax.text(x_center[i], z_center[i], y_center[i], str(i - 1))
+
+        i += 1
+
     plt.show()
