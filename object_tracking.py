@@ -56,7 +56,7 @@ def object_tracking(x_combined,y_combined,index3,x_hits,y_hits,x_hits0,y_hits0):
             rectangle = plt.Rectangle((x_left, y_bottom), x_right - x_left, y_top - y_bottom, fc='none', ec="green") #Draw rectangle around the object
             plt.gca().add_patch(rectangle)
 
-            #This if statement checks if the make_test_data is set to true, if so save each zoomed in image found by the tracking function.
+            #Save a zoomed in image on the object tracking box to be sent to the image classification funtion.
             plt.xlim(x_left, x_right)
             plt.ylim(y_top, y_bottom)
             plt.savefig(str(index3)+"zoom"+str(index))

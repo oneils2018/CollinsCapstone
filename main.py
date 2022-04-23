@@ -60,7 +60,7 @@ max = 5000
 test = 0
 
 # Load data from Aedat file.
-with AedatFile(r"C:\Users\Lenovo\Desktop\capstoneUpdated\CollinsCapstone\dvSave-2022_02_21_14_13_04_cube_and_cone.aedat4") as f:
+with AedatFile(r"C:\CAPSTONE\new_capstone\Capstone - Copy\Working_Directory\Classification Data\Cube_processing\CollinsCapstone-main\dvSave-2022_02_21_14_03_48_cube_long.aedat4") as f:
     events = np.hstack([packet for packet in f['events'].numpy()])
     timestamps, x, y, polarities = events['timestamp'], events['x'], events['y'], events['polarity']
 
@@ -120,7 +120,7 @@ with AedatFile(r"C:\Users\Lenovo\Desktop\capstoneUpdated\CollinsCapstone\dvSave-
             plt.ylim(250, 0)
             plt.axis('off')
             plt.savefig(str(index3))
-            plt.clf()
+        plt.clf()
 
         # Increment time.
         min = min + increment
