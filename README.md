@@ -1,6 +1,6 @@
 # CollinsCapstone
 
-Quick start guide
+Quick start guide. More information can be found in the documentation.
 
 # Graphical User Interface 
 Easiest way to start and edit the code is by using a python IDE such as PyCharm.
