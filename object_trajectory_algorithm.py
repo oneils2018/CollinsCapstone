@@ -54,17 +54,7 @@ def Object_Trajectory_Algorithm():
 
     # How many times should we iterate the tracking function before we give up
     max_tracking_iterations_Prot = 50
-    '''
-    # The time_range is how far back in time and in the future of the current index does the program check for hits
-    # This has the largest hit on performance (Exponentially).
-    time_range_Prot = 7
-    # Positive is the minumun number of neighbor hits that must be attained for the hit to be added to the plot.
-    positive_Prot = 2
-    # The max_distance is the maximum distance in a 3d space where z is time, that a hit must be under to be added to the plot.
-    max_distance_Prot = 10
-    # The increment is the duration of time stamps the program will process at a time then plot to a graph.
-    increment_Prot = 10000
-    '''
+
     ## Note: Filter 1 takes the data from the Aedat file and filters it based on distances from a specific point and its distance from its
     ## neighbors, calculated using the X and Y values, as well as time in the form of a Z axis.
     ## Filter 2 takes the output from Filter 1 and filters it just using the distances from a hit point and its nearest neighbors, not taking
