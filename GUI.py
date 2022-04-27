@@ -22,6 +22,8 @@ import os
 # Allows for subprocesses
 import subprocess
 
+# This file is to start the GUI interface that connects the rest of the scripts in the same folder.
+
 # Restarts the program
 def restartProgram():
     root.destroy()
