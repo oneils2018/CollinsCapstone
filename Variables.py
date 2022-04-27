@@ -17,8 +17,7 @@ import threading
 import os
 
 
-# Tkinter skeleton built off from:
-# https://stackoverflow.com/questions/14817210/using-buttons-in-tkinter-to-navigate-to-different-pages-of-the-application
+# This file hold all of the alterable variables that are used in the different alsogithms. Editing the values here is similar to editing the values with the GUI.
 
 # Makes variables available for all classes making them act as global variables
 class variables():
