@@ -6,7 +6,7 @@ import math as math
 ### FILTER 1 ###
 ################
 
-#This function takes the data from the Aedat file and filters it based on distances from a specific point and its distance from its
+#This function takes the positive polarity data points from the Aedat file and filters it based on distances from a specific point and its distance from its
 # neighbors, calculated using the X and Y values, as well as time in the form of a Z axis.
 
 def Filter1(events, min, max, time_range, max_distance, positive):
