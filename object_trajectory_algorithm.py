@@ -10,8 +10,6 @@ from scipy import stats
 from dv import AedatFile
 import os
 
-#MODIFIED MATTHEW'S AND JEREMY'S CODE TO INCLUDE SEPERATE VARIABLES FILE
-
 def Object_Trajectory_Algorithm():
 
     start_time_Prot = time.time()
