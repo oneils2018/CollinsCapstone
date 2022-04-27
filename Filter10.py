@@ -6,7 +6,7 @@ import math as math
     # Filter10 For -1 Polarity #
     ############################
 
-#This function takes the output from Filter 1 and filters it just using the distances from a hit point and its nearest neighbors, not taking
+#This function takes the output from Filter 1 or Filter 10 and filters it just using the distances from a hit point and its nearest neighbors, not taking
 #into account the time variable.
 
 
