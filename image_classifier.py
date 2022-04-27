@@ -5,7 +5,7 @@ import tensorflow as tf
 import cv2
 from keras.preprocessing import image
 
-
+# This function uses the Tensorflow trained classification model to classify objects.
 
 def image_classifier(index, index3, directorySelVar, model):
     # Load trained model
