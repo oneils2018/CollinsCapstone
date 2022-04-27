@@ -1,6 +1,6 @@
 # CollinsCapstone
 
-Quick start guide. More information can be found in the documentation.
+Quick start guide. More information can be found in documentation.pdf
 
 # Graphical User Interface 
 Easiest way to start and edit the code is by using a python IDE such as PyCharm.
@@ -9,6 +9,8 @@ Installing the modules can be done by adding modules to the Python Interperter s
 Run GUI.py to start the GUI.
 
 Model training can be done using google collab or a command line interface when using the Intel Neural Compute Stick 2.
+
+The Tensorflow model "tensorflow_model.h5" and aedat4 file "Night_Vapor.aedat4" has to be plaved in the same folder as the other scripts. They can be downloaded through the link below or Teams.
 
 # Tensorflow Notes
 Tensorflow trained models are too large to store on github.
