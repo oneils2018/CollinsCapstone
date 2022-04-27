@@ -17,7 +17,7 @@ import threading
 import os
 
 
-# This file hold all of the alterable variables that are used in the different alsogithms. Editing the values here is similar to editing the values with the GUI.
+# This file hold all of the alterable variables that are used in the different algorithms. Editing the values here is similar to editing the values with the GUI.
 
 # Makes variables available for all classes making them act as global variables
 class variables():
