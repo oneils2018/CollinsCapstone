@@ -225,8 +225,8 @@ class Page3(Page):
         option = tk.IntVar()  # Create Test Data
 
         # Title of the 1st section
-        label03 = tk.Label(self, fg='#FF0000', text='Filter and tracking program:\n '
-                                          '(Need to select .aedat4 file before starting filter/track!)\n '
+        label03 = tk.Label(self, fg='#FF0000', text='Filter, track, and classify algorithm:\n '
+                                          '(Need to select .aedat4 file before starting algorithm!)\n '
                                           ''
                  )
 
@@ -238,7 +238,7 @@ class Page3(Page):
         # Buttons to search files to be used and directory where the results are placed
         searchButton1 = tk.Button(self, text='Search File', command=lambda: browseFiles1())
         searchButton2 = tk.Button(self, text='Search Results Directory', command=lambda: browseDirectory1())
-        searchButton3 = tk.Button(self, text='Search Model', command=lambda: browseFiles2())
+        searchButton3 = tk.Button(self, text='Search Classification Model', command=lambda: browseFiles2())
 
         checkBox = tk.Checkbutton(self, text='Turn on test data creation', variable=option, onvalue=1, offvalue=0)
 
@@ -554,16 +554,13 @@ class Page6(Page):
         Page.__init__(self, *args, **kwargs)
 
         path1 = os.path.dirname(__file__) + '\\DAVIS346.pdf'
-        path2 = os.path.dirname(__file__) + '\\Collins Aerospace Machine Vision Filter Methodology.pdf'
-        path3 = os.path.dirname(__file__) + '\\Tracking_Algorithm_Documentation.pdf'
+        path2 = os.path.dirname(__file__) + '\\Documentation.pdf'
 
         helpButton1 = tk.Button(self, text='DAVIS346 Specs', command=lambda: subprocess.Popen([path1], shell=True))
         helpButton2 = tk.Button(self, text='Collins Aerospace Machine Vision Filter Methodology', command=lambda: subprocess.Popen([path2], shell=True))
-        helpButton3 = tk.Button(self, text='Tracking Algorithm Documentation', command=lambda: subprocess.Popen([path3], shell=True))
 
         helpButton1.grid(column=0, row=1, columnspan=1, padx=10, pady=10, sticky='ew')
         helpButton2.grid(column=0, row=2, columnspan=1, padx=10, pady=10, sticky='ew')
-        helpButton3.grid(column=0, row=3, columnspan=1, padx=10, pady=10, sticky='ew')
 
 # The main tkinter frame to function as a top menu row of buttons
 class MainView(tk.Frame):
