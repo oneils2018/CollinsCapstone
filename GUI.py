@@ -24,6 +24,9 @@ import subprocess
 
 # This file is to start the GUI interface that connects the rest of the scripts in the same folder.
 
+# Tkinter skeleton built off from:
+# https://stackoverflow.com/questions/14817210/using-buttons-in-tkinter-to-navigate-to-different-pages-of-the-application
+
 # Restarts the program
 def restartProgram():
     root.destroy()
