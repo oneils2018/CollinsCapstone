@@ -8,14 +8,11 @@ from matplotlib import pyplot as plt
 from numba import jit, njit, vectorize
 from Variables import *
 from functions import *
-    ################
-    ### TRACKING ###
-    ################
+    #######################
+    ### OBJECT TRACKING ###
+    #######################
 
-    #Function below takes filtered data and outputs the object center and left, right, top, and bottom bounds
-    #min_distance is the minimum distance that the algorithm reaches before it "gives up" trying to find more pixels and just sets the last pixel hit as the bound
-    #min_hits is the minimum number of hits required to actually create a box
-    #tolerance is the number of pixels to go past the original bounds to create a box that is bigger then the object
+    #Function uses the jitted teacking.py to track objects and optional test data.
 
 
 jitted_filter5 = jit(nopython=True)(tracking)
