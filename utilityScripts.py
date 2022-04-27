@@ -20,6 +20,7 @@ import random
 # Allows the script to interact with the os
 import os
 
+# Useful scripts that can perform automated tasks. Not part of any algorithm directly.
 
 # NOTE: CODE UNORIGINAL, numericalSort function obtained from
 # https://stackoverflow.com/questions/12093940/reading-files-in-a-particular-order-in-python
