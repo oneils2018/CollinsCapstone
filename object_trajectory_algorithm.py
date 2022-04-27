@@ -10,6 +10,8 @@ from scipy import stats
 from dv import AedatFile
 import os
 
+# Prototype algorithm that plots a 3D graph of ab object’s path and trajectory.
+
 def Object_Trajectory_Algorithm():
 
     start_time_Prot = time.time()
