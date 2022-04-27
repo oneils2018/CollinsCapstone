@@ -13,7 +13,7 @@ from functions import *
 
 # The code within this program is organized as such:
 # The main.py is the python script that runs the code. It is responsible for loading the davis camera recordins, and then using funcions defined in other files to filter the data
-# and save the resulting images within the folder it is run in.
+# and save the resulting images within the folder it is run in. It is a function so that the GUI can call on it but it can be run without the GUI if the function is called elsewhere.
 
 # Most functions you will see below have jitted_ in front of them. This is a function that has been passed to the numba library to convert them to machine code that makes them run much faster.
 # If you are trying to follow the function calling path, go to the file name after the jitted_ within the folder that the main.py is located.
