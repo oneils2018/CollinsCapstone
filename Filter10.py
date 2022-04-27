@@ -6,8 +6,8 @@ import math as math
     # Filter10 For -1 Polarity #
     ############################
 
-#This function takes the output from Filter 1 or Filter 10 and filters it just using the distances from a hit point and its nearest neighbors, not taking
-#into account the time variable.
+# This function takes the negative polarity data points from the Aedat file and filters it based on distances from a specific point and its distance from its
+# neighbors, calculated using the X and Y values, as well as time in the form of a Z axis.
 
 
 def Filter10(events, min, max, time_range, max_distance, positive):
