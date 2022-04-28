@@ -562,7 +562,7 @@ class Page6(Page):
         path2 = os.path.dirname(__file__) + '\\Documentation.pdf'
 
         helpButton1 = tk.Button(self, text='DAVIS346 Specs', command=lambda: subprocess.Popen([path1], shell=True))
-        helpButton2 = tk.Button(self, text='Collins Aerospace Machine Vision Filter Methodology', command=lambda: subprocess.Popen([path2], shell=True))
+        helpButton2 = tk.Button(self, text='Documentation', command=lambda: subprocess.Popen([path2], shell=True))
 
         helpButton1.grid(column=0, row=1, columnspan=1, padx=10, pady=10, sticky='ew')
         helpButton2.grid(column=0, row=2, columnspan=1, padx=10, pady=10, sticky='ew')
