@@ -13,7 +13,7 @@ Call the FilterTrackCode function in the main.py file to run the algorithms with
 
 Model training can be done using google collab or a command line interface when using the Intel Neural Compute Stick 2.
 
-The Tensorflow model "tensorflow_model.h5" and aedat4 file "Night_Vapor.aedat4" has to be plaved in the same folder as the other scripts. They can be downloaded through the link below or Teams.
+The Tensorflow model "tensorflow_model.h5" and aedat4 file "Night_Vapor.aedat4" has to be placed in the same folder as the other scripts. They can be downloaded through the link below or Teams.
 
 # Tensorflow Notes
 Tensorflow trained models are too large to store on github.
