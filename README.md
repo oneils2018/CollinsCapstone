@@ -6,7 +6,10 @@ Quick start guide. More information can be found in "Documentation.pdf"
 Easiest way to start and edit the code is by using a python IDE such as PyCharm.
 PyCharm was mainly used to edit and start/stop the GUI.
 Installing the modules can be done by adding modules to the Python Interperter setting. If an error or missing module occures, PyCharm can show advise on how to fix them like using pip.
+
 Run GUI.py to start the GUI.
+
+Call the FilterTrackCode function in the main.py file to run the algorithms without a GUI.
 
 Model training can be done using google collab or a command line interface when using the Intel Neural Compute Stick 2.
 
